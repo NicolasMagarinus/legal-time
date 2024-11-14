@@ -17,26 +17,32 @@
             font-family: 'Arial', sans-serif;
             background-color: #f8f9fa;
         }
-        .navbar {
+        .sidebar {
             background-color: #343a40;
+            height: 100vh;
+            padding: 1rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
-        .navbar-brand {
+        .sidebar .nav-link {
+            color: #ffffff;
+            margin-bottom: 1rem;
+        }
+        .sidebar .nav-link:hover {
+            color: #adb5bd;
+        }
+        .sidebar .nav-link.active {
             font-weight: bold;
-            color: #ffffff !important;
+            color: #ffc107;
         }
-        .nav-link {
-            color: #ffffff !important;
-            margin-right: 1rem;
-        }
-        .nav-link:hover {
-            color: #adb5bd !important;
-        }
-        .nav-link.active {
-            font-weight: bold;
-            color: #ffc107 !important;
-        }
-        .navbar-toggler {
-            border-color: rgba(255, 255, 255, 0.5);
+        .content {
+            margin-left: 220px;
+            padding: 2rem;
         }
         .form-control {
             border-radius: 30px;
@@ -49,60 +55,62 @@
             color: white;
             text-align: center;
             padding: 1rem 0;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
+            position: relative;
+            display: none;
+        }
+        .user-section {
+            margin-top: auto;
+            padding-bottom: 1rem;
         }
     </style>
 </head>
 <body>
 
     @if (!Request::is('login') && !Request::is('register'))
-        <nav class="navbar navbar-expand-lg navbar-dark">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">LegalTime</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Services</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Contact</a>
-                        </li>
-                    </ul>
-                    <form class="d-flex me-3">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">
-                            <i class="fas fa-search"></i> Search
-                        </button>
-                    </form>
-                    @if (isset($usuario))
-                        <a href="{{ route('usuario.index') }}" class="nav-link">
-                            <i class="fas fa-user-circle fa-lg"></i>
-                        </a>
-                    @else
-                        <a href="{{ route('login.index') }}" class="nav-link">
-                            <i class="fas fa-sign-in-alt"></i> Login
-                        </a>
-                    @endif
-                </div>
+        <div class="sidebar">
+            <div>
+                <a class="navbar-brand text-white d-block mb-4" href="#">LegalTime</a>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                </ul>
             </div>
-        </nav>
+
+            <div class="user-section">
+                @if (isset($usuario))
+                    <a href="{{ route('usuario.index') }}" class="nav-link">
+                        <i class="fas fa-solid fa-gear"></i>
+                    </a>
+                @else
+                    <a href="{{ route('login.index') }}" class="nav-link">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                @endif
+            </div>
+        </div>
     @endif
 
-    <div class="container mt-5">
-        @yield('content')
+    <div class="content">
+        <div class="container mt-5">
+            @yield('content')
+        </div>
     </div>
 
-    <footer>
-        <p>&copy; 2024 LegalTime - All Rights Reserved</p>
+    <footer id="footer">
+        <p>&copy; 2024 LegalTime - Todos direitos reservados</p>
     </footer>
+
+    <script>
+        window.addEventListener('scroll', function() {
+            const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+            const scrolled = window.scrollY;
+
+            if (Math.ceil(scrolled) >= scrollable) {
+                document.getElementById('footer').style.display = 'block';
+            }
+        });
+    </script>
 
 </body>
 </html>
