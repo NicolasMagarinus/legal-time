@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="{{ asset('js/custom.js') }}"></script>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -72,7 +73,15 @@
                 <a class="navbar-brand text-white d-block mb-4" href="#">LegalTime</a>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        <a class="nav-link active" aria-current="page" href="{{ route('home') }}">Página Principal <i class="fa-solid fa-house"></i></a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ route('agendamento.index') }}">Agendamentos <i class="fa-regular fa-calendar"></i></a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ route('home') }}">Avaliações <i class="fa-regular fa-star"></i></i></a>
                     </li>
                 </ul>
             </div>
