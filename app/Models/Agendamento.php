@@ -23,16 +23,15 @@ class Agendamento extends Model
     ];
 
     public static function buscaAgendamentos()
-{
-    $agendamentos = DB::table("agendamento AS ag")
-        ->join("usuario AS u", "u.id", "=", "ag.usuario_id")
-        ->join("advogado AS ad", "ad.id", "=", "ag.advogado_id")
-        ->select("ag.id", "ag.status", "ad.nome")
-        ->selectRaw("TO_CHAR(ag.data, 'DD/MM/YYYY HH24:MI:SS') AS data")
-        ->where("ag.usuario_id", "=", Auth::user()->id)
-        ->get();
+    {
+        $agendamentos = DB::table("agendamento AS ag")
+            ->join("usuario AS u", "u.id", "=", "ag.usuario_id")
+            ->join("advogado AS ad", "ad.id", "=", "ag.advogado_id")
+            ->select("ag.id", "ag.status", "ad.nome")
+            ->selectRaw("TO_CHAR(ag.data, 'DD/MM/YYYY HH24:MI:SS') AS data")
+            ->where("ag.usuario_id", "=", Auth::user()->id)
+            ->get();
 
-    return $agendamentos;
-}
-
+        return $agendamentos;
+    }
 }

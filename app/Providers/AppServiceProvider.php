@@ -24,7 +24,5 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $view->with('usuario', Auth::user());
         });
-
-        // dd(Auth::user());
     }
 }

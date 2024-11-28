@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\AgendamentoController;
+use App\Http\Controllers\AvaliacaoController;
+use App\Http\Controllers\AdvogadoController;
+use App\Http\Controllers\EspecialidadeController;
 
 Route::get('/', function () {
     if (!Auth::check())
@@ -12,13 +15,16 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-// Rotas de login e logout
 Route::get('/login', [LoginController::class, 'index'])->name('login.index');
 Route::post('/login', [LoginController::class, 'entrar'])->name('login.entrar');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-// Rotas para gerenciamento de usuários
 Route::resource('usuario', UsuarioController::class);
 
-//Rotas para gerenciamento dos agendamentos
 Route::resource('agendamento', AgendamentoController::class);
+
+Route::resource('avaliacao', AvaliacaoController::class);
+
+Route::resource('advogado', AdvogadoController::class);
+
+Route::resource('especialidade', EspecialidadeController::class);

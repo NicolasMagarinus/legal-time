@@ -18,7 +18,8 @@ class Usuario extends Authenticatable
         'email',
         'senha',
         'endereco',
-        'telefone'
+        'telefone',
+        'id_tipo'
     ];
 
     public function setPasswordAttribute($value) {

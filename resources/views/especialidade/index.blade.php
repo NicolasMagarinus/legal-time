@@ -1,6 +1,6 @@
 @extends('components.layouts.app')
 
-@section('title', 'Listagem de Usuários')
+@section('title', 'Listagem de Especialidades')
 
 @section('content')
     <div class="container mt-5">
@@ -23,43 +23,40 @@
         @endif
 
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h3">Listagem de Usuários</h1>
+            <h1 class="h3">Listagem de Avaliações</h1>
+            <a href="{{ route('especialidade.create') }}" class="btn btn-success">
+                <i class="fas fa-plus"></i> Adicionar
+            </a>
         </div>
 
         <div class="table-responsive">
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr class="bg-light">
-                        <th scope="col">Nome</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Telefone</th>
-                        <th scope="col">Endereço</th>
+                        <th scope="col">Descrição</th>
                         <th scope="col" class="text-center">Ações</th>
                     </tr>
                 </thead>
                 <tbody id="user-table">
-                    @forelse($usuarios as $usuario)
+                    @forelse($especialidades as $especialidade)
                         <tr>
-                            <td>{{ $usuario->nome }}</td>
-                            <td>{{ $usuario->email }}</td>
-                            <td>{{ $usuario->telefone }}</td>
-                            <td>{{ $usuario->endereco }}</td>
+                            <td>{{ $especialidade->descricao }}</td>
                             <td class="text-center">
-                                <a href="{{ route('usuario.show', $usuario->id) }}" class="btn btn-info btn-sm" title="Informações">
+                                <a href="{{ route('especialidade.show', $especialidade->id) }}" class="btn btn-info btn-sm" title="Informações">
                                     <i class="fas fa-solid fa-bars"></i>
                                 </a>
-                                <a href="{{ route('usuario.edit', $usuario->id) }}" class="btn btn-warning btn-sm" title="Editar">
+                                <a href="{{ route('especialidade.edit', $especialidade->id) }}" class="btn btn-warning btn-sm" title="Editar">
                                     <i class="fas fa-pen"></i>
                                 </a>
                                 <button
                                     class="btn btn-danger btn-sm btn-delete"
-                                    data-id="{{ $usuario->id }}"
+                                    data-id="{{ $especialidade->id }}"
                                     title="Excluir">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
-                                <form action="{{ route('usuario.destroy', $usuario->id) }}"
+                                <form action="{{ route('especialidade.destroy', $especialidade->id) }}"
                                       method="POST"
-                                      id="form-delete-{{ $usuario->id }}"
+                                      id="form-delete-{{ $especialidade->id }}"
                                       class="d-none">
                                     @csrf
                                     @method('DELETE')
@@ -68,7 +65,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center">Nenhum usuário encontrado.</td>
+                            <td colspan="4" class="text-center">Nenhuma especialidade encontrada.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -77,6 +74,7 @@
     </div>
 
     @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const delBtn = document.querySelectorAll('.btn-delete');

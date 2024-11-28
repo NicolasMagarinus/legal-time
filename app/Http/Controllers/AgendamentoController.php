@@ -55,7 +55,7 @@ class AgendamentoController extends Controller
 
             return redirect()->route('agendamento.index')->with('success', 'Agendamento realizado com sucesso!');
         } catch (Exception $e) {
-            dd($e);
+            return redirect()->back()->with('error', "Houve um erro ao realizar o agendamento: {$e->getMessage()}");
         }
     }
 
@@ -109,7 +109,7 @@ class AgendamentoController extends Controller
 
             return redirect()->route('agendamento.show', [$agendamento, $advogado])->with('success', 'Agendamento atualizado com sucesso!');
         } catch (Exception $e) {
-            dd($e);
+            return redirect()->back()->with('error', "Houve um erro ao atualizar o agendamento: {$e->getMessage()}");
         }
     }
 

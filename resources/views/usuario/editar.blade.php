@@ -38,7 +38,7 @@
 
                     <div class="form-group mb-3">
                         <label for="telefone">Telefone:</label>
-                        <input type="text" name="telefone" class="form-control" value="{{ old('telefone', $usuario->telefone) }}" required>
+                        <input type="number" name="telefone" class="form-control" value="{{ old('telefone', $usuario->telefone) }}" required>
                     </div>
 
                     <div class="form-group mb-3">

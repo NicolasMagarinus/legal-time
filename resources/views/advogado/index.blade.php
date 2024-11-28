@@ -1,6 +1,6 @@
 @extends('components.layouts.app')
 
-@section('title', 'Listagem de Usuários')
+@section('title', 'Informações do Advogado')
 
 @section('content')
     <div class="container mt-5">
@@ -22,61 +22,48 @@
             </div>
         @endif
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h3">Listagem de Usuários</h1>
-        </div>
-
         <div class="table-responsive">
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr class="bg-light">
-                        <th scope="col">Nome</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Telefone</th>
-                        <th scope="col">Endereço</th>
+                        <th scope="col">Advogado</th>
+                        <th scope="col">Especialidade</th>
                         <th scope="col" class="text-center">Ações</th>
                     </tr>
                 </thead>
                 <tbody id="user-table">
-                    @forelse($usuarios as $usuario)
-                        <tr>
-                            <td>{{ $usuario->nome }}</td>
-                            <td>{{ $usuario->email }}</td>
-                            <td>{{ $usuario->telefone }}</td>
-                            <td>{{ $usuario->endereco }}</td>
-                            <td class="text-center">
-                                <a href="{{ route('usuario.show', $usuario->id) }}" class="btn btn-info btn-sm" title="Informações">
-                                    <i class="fas fa-solid fa-bars"></i>
-                                </a>
-                                <a href="{{ route('usuario.edit', $usuario->id) }}" class="btn btn-warning btn-sm" title="Editar">
-                                    <i class="fas fa-pen"></i>
-                                </a>
-                                <button
-                                    class="btn btn-danger btn-sm btn-delete"
-                                    data-id="{{ $usuario->id }}"
-                                    title="Excluir">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                                <form action="{{ route('usuario.destroy', $usuario->id) }}"
-                                      method="POST"
-                                      id="form-delete-{{ $usuario->id }}"
-                                      class="d-none">
-                                    @csrf
-                                    @method('DELETE')
-                                </form>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="text-center">Nenhum usuário encontrado.</td>
-                        </tr>
-                    @endforelse
+                    <tr>
+                        <td>{{ $advogado->nome }}</td>
+                        <td>{{ $advogado->descricao }}</td>
+                        <td class="text-center">
+                            <a href="{{ route('advogado.show', $advogado->id) }}" class="btn btn-info btn-sm" title="Informações">
+                                <i class="fas fa-solid fa-bars"></i>
+                            </a>
+                            <a href="{{ route('advogado.edit', $advogado->id) }}" class="btn btn-warning btn-sm" title="Editar">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                            <button
+                                class="btn btn-danger btn-sm btn-delete"
+                                data-id="{{ $advogado->id }}"
+                                title="Excluir">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                            <form action="{{ route('advogado.destroy', $advogado->id) }}"
+                                    method="POST"
+                                    id="form-delete-{{ $advogado->id }}"
+                                    class="d-none">
+                                @csrf
+                                @method('DELETE')
+                            </form>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
     @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const delBtn = document.querySelectorAll('.btn-delete');
@@ -84,7 +71,7 @@
                     button.addEventListener('click', function () {
                         const id = this.getAttribute('data-id');
                         Swal.fire({
-                            title: 'Você tem certeza?',
+                            title: 'Você tem certeza? O usuário será excluído completamente!',
                             text: 'Esta ação não pode ser desfeita!',
                             icon: 'warning',
                             showCancelButton: true,

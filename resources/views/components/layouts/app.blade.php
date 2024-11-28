@@ -3,14 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LegalTime</title>
+    <title>LegalTime - @yield('title', 'Bem-vindo')</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <script src="{{ asset('js/custom.js') }}"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
@@ -66,11 +63,10 @@
     </style>
 </head>
 <body>
-
     @if (!Request::is('login') && !Request::is('register'))
         <div class="sidebar">
             <div>
-                <a class="navbar-brand text-white d-block mb-4" href="#">LegalTime</a>
+                <a class="navbar-brand text-white d-block mb-4">LegalTime</a>
                 <ul class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="{{ route('home') }}">Página Principal <i class="fa-solid fa-house"></i></a>
@@ -81,15 +77,24 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ route('home') }}">Avaliações <i class="fa-regular fa-star"></i></i></a>
+                        <a class="nav-link active" aria-current="page" href="{{ route('avaliacao.index') }}">Avaliações <i class="fa-regular fa-star"></i></a>
                     </li>
+
+                    @if(auth()->user() && auth()->user()->id_tipo == 1)
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ route('advogado.index') }}">Advogado <i class="fa-solid fa-user-tie"></i></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ route('especialidade.index') }}">Especialidade <i class="fa-solid fa-cogs"></i></a>
+                        </li>
+                    @endif
                 </ul>
             </div>
 
             <div class="user-section">
                 @if (isset($usuario))
                     <a href="{{ route('usuario.index') }}" class="nav-link">
-                        <i class="fas fa-solid fa-gear"></i>
+                        <i class="fas fa-solid fa-user"></i>
                     </a>
                 @else
                     <a href="{{ route('login.index') }}" class="nav-link">
@@ -109,6 +114,9 @@
     <footer id="footer">
         <p>&copy; 2024 LegalTime - Todos direitos reservados</p>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @stack('scripts')
 
     <script>
         window.addEventListener('scroll', function() {

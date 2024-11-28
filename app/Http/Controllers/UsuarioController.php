@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Usuario;
+use App\Models\Advogado;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -26,10 +27,6 @@ class UsuarioController extends Controller
         return view('usuario.listagem')->with('usuario', $usuario);
     }
 
-    public function create()
-    {
-        //
-    }
 
     public function store(Request $request)
     {
@@ -38,21 +35,32 @@ class UsuarioController extends Controller
             'email'    => 'required|email|unique:usuario,email',
             'senha'    => 'required|string|min:8|max:16|confirmed',
             'telefone' => 'required|string|max:20',
-            'endereco' => 'required|string|max:255'
+            'endereco' => 'required|string|max:255',
+            'id_tipo'  => 'required|in:0,1'
         ]);
 
         try {
             Usuario::create([
                 'nome'     => $validated['nome'],
                 'email'    => $validated['email'],
-                'senha'    => Hash::make($validated['senha']),
                 'telefone' => $validated['telefone'],
-                'endereco' => $validated['endereco']
+                'endereco' => $validated['endereco'],
+                'senha'    => Hash::make($validated['senha']),
+                'id_tipo'  => $request->id_tipo
             ]);
 
-            return redirect()->route('login.index')->with('success', 'Registro realizado com sucesso!');
+            if ($request->id_tipo == 1) {
+                Advogado::create([
+                    'nome'     => $request->nome,
+                    'email'    => $request->email,
+                    'telefone' => $request->telefone,
+                    'endereco' => $request->endereco
+                ]);
+            }
+
+            return redirect()->route('login.index')->with('success', 'Usuário criado com sucesso!');
         } catch (Exception $e) {
-            dd($e);
+            return redirect()->route('login.index')->with('error', "Houve um erro ao criar o usuário: {$e->getMessage()}");
         }
     }
 

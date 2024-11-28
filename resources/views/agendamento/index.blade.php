@@ -3,37 +3,36 @@
 @section('title', 'Listagem de Agendamentos')
 
 @section('content')
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
     <div class="container mt-5">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <div class="position-relative">
-                <span class="position-absolute search-icon"><i class="fa fa-search"></i></span>
-                &nbsp;
-                <input id="search-input" type="text" class="form-control" placeholder="Pesquisar por nome ou email...">
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
+        @endif
 
-            <a href="{{ route('agendamento.create') }}" class="btn btn-success">
-                <i class="fas fa-plus"></i> Adicionar
-            </a>
+        @if($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <ul class="mb-0">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h3">Listagem de Agendamentos</h1>
+            <div class="d-flex">
+                <a href="{{ route('agendamento.create') }}" class="btn btn-success">
+                    <i class="fas fa-plus"></i> Adicionar
+                </a>
+            </div>
         </div>
 
         <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-striped table-bordered">
                 <thead>
                     <tr class="bg-light">
                         <th scope="col">Advogado</th>
@@ -43,11 +42,15 @@
                     </tr>
                 </thead>
                 <tbody id="user-table">
-                    @foreach($agendamentos as $agendamento)
+                    @forelse($agendamentos as $agendamento)
                         <tr>
                             <td>{{ $agendamento->nome }}</td>
                             <td>{{ $agendamento->data }}</td>
-                            <td>{{ $agendamento->status == 1 ? "Pendente" : "Concluído" }}</td>
+                            <td>
+                                <span class="badge {{ $agendamento->status == 1 ? 'bg-warning text-dark' : 'bg-success' }}">
+                                    {{ $agendamento->status == 1 ? 'Pendente' : 'Concluído' }}
+                                </span>
+                            </td>
                             <td class="text-center">
                                 <a href="{{ route('agendamento.show', $agendamento->id) }}" class="btn btn-info btn-sm" title="Informações">
                                     <i class="fas fa-solid fa-bars"></i>
@@ -55,18 +58,55 @@
                                 <a href="{{ route('agendamento.edit', $agendamento->id) }}" class="btn btn-warning btn-sm" title="Editar">
                                     <i class="fas fa-pen"></i>
                                 </a>
-                                <form action="{{ route('agendamento.destroy', $agendamento->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Tem certeza que deseja excluir este agendamento?')">
+                                <button
+                                    class="btn btn-danger btn-sm btn-delete"
+                                    data-id="{{ $agendamento->id }}"
+                                    title="Excluir">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                                <form action="{{ route('agendamento.destroy', $agendamento->id) }}"
+                                      method="POST"
+                                      id="form-delete-{{ $agendamento->id }}"
+                                      class="d-none">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" title="Excluir">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
                                 </form>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="4" class="text-center">Nenhum agendamento encontrado.</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
     </div>
+
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const delBtn = document.querySelectorAll('.btn-delete');
+                delBtn.forEach(button => {
+                    button.addEventListener('click', function () {
+                        const id = this.getAttribute('data-id');
+                        Swal.fire({
+                            title: 'Você tem certeza?',
+                            text: 'Esta ação não pode ser desfeita!',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33',
+                            cancelButtonColor: '#3085d6',
+                            confirmButtonText: 'Sim, excluir!',
+                            cancelButtonText: 'Cancelar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                document.getElementById(`form-delete-${id}`).submit();
+                            }
+                        });
+                    });
+                });
+            });
+        </script>
+    @endpush
 @endsection

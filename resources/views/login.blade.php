@@ -79,6 +79,14 @@
                             <p class="text-center">ou:</p>
 
                             <div class="mb-3">
+                                <select name="id_tipo" id="id_tipo" class="form-select" required>
+                                    <option value="">Tipo de Usuário</option>
+                                    <option value="0">Cliente</option>
+                                    <option value="1">Advogado</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
                                 <input type="text" name="nome" id="registerName" class="form-control" placeholder="Nome" required/>
                             </div>
 
